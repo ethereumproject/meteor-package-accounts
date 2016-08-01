@@ -3,8 +3,6 @@
 @module Ethereum:accounts
 */
 
-
-
 /**
 The accounts collection, with some ethereum additions.
 
@@ -15,10 +13,8 @@ var collection = new Mongo.Collection('ethereum_accounts', {connection: null});
 EthAccounts = _.clone(collection);
 EthAccounts._collection = collection;
 
-
 if(typeof PersistentMinimongo !== 'undefined')
     new PersistentMinimongo(EthAccounts._collection);
-
 
 EthAccounts._watching = false;
 
@@ -29,9 +25,7 @@ Updates the accounts balances, by watching for new blocks and checking the balan
 */
 EthAccounts._watchBalance = function(){
     var _this = this;
-
     this._watching = true;
-
     // UPDATE SIMPLE ACCOUNTS balance on each new block
     web3.eth.filter('latest').watch(function(e, res){
         if(!e) {
@@ -70,23 +64,16 @@ EthAccounts._addAccounts = function(){
     web3.eth.getAccounts(function(e, accounts){
         if(!e) {
             var visibleAccounts = _.pluck(EthAccounts.find().fetch(), 'address');
-
-
             if(!_.isEmpty(accounts) &&
                 _.difference(accounts, visibleAccounts).length === 0 &&
                 _.difference(visibleAccounts, accounts).length === 0)
                 return;
-
-
             var localAccounts = EthAccounts.findAll().fetch();
-
             // if the accounts are different, update the local ones
             _.each(localAccounts, function(account){
-
                 // needs to have the balance
                 if(!account.balance)
                     return;
-
                 // set status deactivated, if it seem to be gone
                 if(!_.contains(accounts, account.address)) {
                     EthAccounts.updateAll(account._id, {$set: {
