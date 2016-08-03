@@ -1,5 +1,4 @@
 /**
-
 @module Ethereum:accounts
 */
 
@@ -132,17 +131,14 @@ Builds the query with the addition of "{deactivated: {$exists: false}}"
 */
 EthAccounts._addToQuery = function(args){
     var args = Array.prototype.slice.call(args);
-
     if(_.isObject(args[0]))
         args[0] = _.extend(args[0], {deactivated: {$exists: false}});
     else if(_.isString(args[0]))
         args[0] = {_id: args[0], deactivated: {$exists: false}};
     else
         args[0] = {deactivated: {$exists: false}};
-
     return args;
 };
-
 
 /**
 Find all accounts, besides the deactivated ones
@@ -150,7 +146,7 @@ Find all accounts, besides the deactivated ones
 @method find
 @return {Object} cursor
 */
-EthAccounts.find = function(){    
+EthAccounts.find = function(){
     return this._collection.find.apply(this, this._addToQuery(arguments));
 };
 
@@ -224,13 +220,10 @@ EthAccounts.init = function(){
     };
 
     Tracker.nonreactive(function(){
-
         _this._addAccounts();
-
         if(!_this._watching) {
             _this._updateBalance();
             _this._watchBalance();
-
             // check for new accounts every 2s
             Meteor.clearInterval(_this._intervalId);
             _this._intervalId = Meteor.setInterval(function(){

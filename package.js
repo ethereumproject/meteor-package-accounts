@@ -20,7 +20,7 @@ Package.onUse(function(api) {
 
 // Package.onTest(function(api) {
 //   api.use('tinytest');
-//   api.use('ethereum:accounts');
+//   api.use('etc:accounts');
 //   api.addFiles('accounts-tests.js');
 // });
 
